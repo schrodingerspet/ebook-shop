@@ -1,0 +1,24 @@
+.rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  color: #98a2b3;
+  font-size: 0.86rem;
+}
+
+.rating-stars .filled {
+  color: #f59e0b;
+}
+
+.rating-stars__value {
+  margin-left: 0.25rem;
+  color: #344054;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.rating-stars__reviews {
+  margin-left: 0.2rem;
+  color: var(--muted);
+  font-size: 0.79rem;
+}

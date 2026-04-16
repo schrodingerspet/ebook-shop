@@ -1,0 +1,46 @@
+.contact-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 0.75rem;
+}
+
+.contact-info,
+.contact-form {
+  border-radius: 8px;
+  padding: 0.95rem;
+}
+
+.contact-info h2,
+.contact-form h2 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.contact-info p {
+  margin: 0 0 0.5rem;
+  color: #475467;
+  font-size: 0.85rem;
+}
+
+.contact-faq {
+  margin-top: 0.7rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.55rem;
+}
+
+.contact-faq h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.contact-success {
+  margin: 0.65rem 0 0;
+  color: #067647;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+}

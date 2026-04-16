@@ -1,0 +1,21 @@
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  border-radius: 8px;
+}
+
+.empty-state__icon {
+  font-size: 2rem;
+}
+
+.empty-state h2 {
+  margin: 0.65rem 0 0.32rem;
+  font-size: 1.25rem;
+}
+
+.empty-state p {
+  margin: 0 auto 1rem;
+  max-width: 500px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}

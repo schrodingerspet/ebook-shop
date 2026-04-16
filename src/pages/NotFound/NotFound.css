@@ -1,0 +1,24 @@
+.not-found__card {
+  border-radius: 8px;
+  text-align: center;
+  padding: 1.8rem 1rem;
+}
+
+.not-found__code {
+  margin: 0;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.not-found__card h1 {
+  margin: 0.35rem 0;
+  font-size: 1.35rem;
+}
+
+.not-found__card p {
+  margin: 0 auto 0.9rem;
+  max-width: 520px;
+  color: #475467;
+  font-size: 0.9rem;
+}

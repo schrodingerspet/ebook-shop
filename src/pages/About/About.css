@@ -1,0 +1,21 @@
+.about-page {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.about-card {
+  border-radius: 8px;
+  padding: 0.95rem;
+}
+
+.about-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.about-card p {
+  margin: 0;
+  color: #475467;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}

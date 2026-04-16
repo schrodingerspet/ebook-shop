@@ -1,0 +1,30 @@
+.order-summary {
+  padding: 0.95rem;
+  border-radius: 8px;
+}
+
+.order-summary h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1rem;
+}
+
+.order-summary__row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.58rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.order-summary__row.total {
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.62rem;
+  margin-top: 0.25rem;
+}
+
+.order-summary__btn {
+  margin-top: 0.45rem;
+}

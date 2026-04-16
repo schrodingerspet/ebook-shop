@@ -1,0 +1,24 @@
+.section-title {
+  margin-bottom: 0.9rem;
+}
+
+.section-title h2 {
+  margin: 0 0 0.3rem;
+  font-size: clamp(1.2rem, 2.3vw, 1.55rem);
+  line-height: 1.2;
+}
+
+.section-title p {
+  margin: 0;
+  color: #475467;
+  max-width: 720px;
+  font-size: 0.9rem;
+}
+
+.section-title--center {
+  text-align: center;
+}
+
+.section-title--center p {
+  margin-inline: auto;
+}

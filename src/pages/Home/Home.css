@@ -1,0 +1,38 @@
+.home-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.7rem;
+}
+
+.home-categories__card {
+  border-radius: 8px;
+  padding: 0.7rem;
+  text-align: center;
+}
+
+.home-categories__card span {
+  font-size: 1.2rem;
+}
+
+.home-categories__card h3 {
+  margin: 0.35rem 0 0.2rem;
+  font-size: 0.85rem;
+}
+
+.home-categories__card p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #475467;
+}
+
+.home-promos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+@media (max-width: 860px) {
+  .home-promos {
+    grid-template-columns: 1fr;
+  }
+}

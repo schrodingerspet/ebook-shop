@@ -1,0 +1,26 @@
+.trust-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.trust-section__item {
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.trust-section__item span {
+  font-size: 1.15rem;
+}
+
+.trust-section__item h3 {
+  margin: 0.45rem 0 0.28rem;
+  font-size: 0.95rem;
+}
+
+.trust-section__item p {
+  margin: 0;
+  font-size: 0.83rem;
+  color: #475467;
+  line-height: 1.45;
+}
