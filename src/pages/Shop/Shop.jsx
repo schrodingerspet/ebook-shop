@@ -6,19 +6,22 @@ import FilterSidebar from '../../components/FilterSidebar/FilterSidebar'
 import SortBar from '../../components/SortBar/SortBar'
 import BookCard from '../../components/BookCard/BookCard'
 import EmptyState from '../../components/EmptyState/EmptyState'
-import books from '../../data/books'
+import { useBooks } from '../../context/BooksContext'
 import './Shop.css'
 
-const maxBookPrice = Math.ceil(Math.max(...books.map((book) => book.price)))
-
 function Shop() {
+  const { books, booksLoading, booksError } = useBooks()
   const [searchParams, setSearchParams] = useSearchParams()
+  const maxBookPrice = useMemo(() => {
+    if (!books.length) return 100
+    return Math.ceil(Math.max(...books.map((book) => Number(book.price) || 0)))
+  }, [books])
 
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '')
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get('category') || 'All',
   )
-  const [maxPrice, setMaxPrice] = useState(maxBookPrice)
+  const [maxPrice, setMaxPrice] = useState(Number.POSITIVE_INFINITY)
   const [minRating, setMinRating] = useState(0)
   const [sortBy, setSortBy] = useState('popularity')
 
@@ -68,15 +71,46 @@ function Shop() {
     if (sortBy === 'price-high') sorted.sort((a, b) => b.price - a.price)
 
     return sorted
-  }, [searchTerm, selectedCategory, maxPrice, minRating, sortBy])
+  }, [books, searchTerm, selectedCategory, maxPrice, minRating, sortBy])
 
   const resetFilters = () => {
     setSearchTerm('')
     setSelectedCategory('All')
-    setMaxPrice(maxBookPrice)
+    setMaxPrice(Number.POSITIVE_INFINITY)
     setMinRating(0)
     setSortBy('popularity')
     setSearchParams({})
+  }
+
+  if (booksLoading) {
+    return (
+      <>
+        <PageBanner title="All Ebooks" subtitle="Loading books from database..." />
+        <section className="section-space">
+          <div className="page-container">
+            <p>Loading books...</p>
+          </div>
+        </section>
+      </>
+    )
+  }
+
+  if (booksError) {
+    return (
+      <>
+        <PageBanner title="All Ebooks" subtitle="Database connection is required." />
+        <section className="section-space">
+          <div className="page-container">
+            <EmptyState
+              title="Could not load books"
+              description={booksError}
+              actionText="Back to Home"
+              actionLink="/"
+            />
+          </div>
+        </section>
+      </>
+    )
   }
 
   return (
@@ -90,7 +124,7 @@ function Shop() {
         <div className="page-container-wide shop-layout">
           <FilterSidebar
             selectedCategory={selectedCategory}
-            maxPrice={maxPrice}
+            maxPrice={Number.isFinite(maxPrice) ? maxPrice : maxBookPrice}
             maxPriceLimit={maxBookPrice}
             minRating={minRating}
             onCategoryChange={handleCategoryChange}

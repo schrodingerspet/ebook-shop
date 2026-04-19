@@ -7,21 +7,47 @@ import Button from '../../components/Button/Button'
 import EmptyState from '../../components/EmptyState/EmptyState'
 import { useCart } from '../../context/CartContext'
 import { useWishlist } from '../../context/WishlistContext'
+import { useBooks } from '../../context/BooksContext'
 import {
   formatCurrency,
   formatNumber,
   getDiscountPercent,
 } from '../../utils/format'
-import books from '../../data/books'
 import './BookDetails.css'
 
 function BookDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { books, booksLoading, booksError } = useBooks()
   const { addToCart } = useCart()
-  const { toggleWishlist, isInWishlist } = useWishlist()
+  const { toggleWishlist, isInWishlist, wishlistError } = useWishlist()
 
   const book = books.find((item) => String(item.id) === id)
+
+  if (booksLoading) {
+    return (
+      <section className="section-space">
+        <div className="page-container">
+          <p>Loading book details...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (booksError) {
+    return (
+      <section className="section-space">
+        <div className="page-container">
+          <EmptyState
+            title="Could not load books"
+            description={booksError}
+            actionText="Back to Shop"
+            actionLink="/shop"
+          />
+        </div>
+      </section>
+    )
+  }
 
   if (!book) {
     return (
@@ -88,10 +114,12 @@ function BookDetails() {
                 <Button variant="secondary" onClick={handleBuyNow}>
                   Buy Now
                 </Button>
-                <Button variant="ghost" onClick={() => toggleWishlist(book)}>
+                <Button variant="ghost" onClick={() => void toggleWishlist(book)}>
                   {isInWishlist(book.id) ? 'Remove Wishlist' : 'Add Wishlist'}
                 </Button>
               </div>
+
+              {wishlistError ? <p className="muted">{wishlistError}</p> : null}
 
               <p className="book-details__support">
                 Need help? Contact support for ebook access issues or order help.

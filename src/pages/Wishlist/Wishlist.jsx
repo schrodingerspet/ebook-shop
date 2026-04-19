@@ -8,7 +8,13 @@ import { formatCurrency } from '../../utils/format'
 import './Wishlist.css'
 
 function Wishlist() {
-  const { wishlistItems, removeFromWishlist, moveToCartFromWishlist } = useWishlist()
+  const {
+    wishlistItems,
+    removeFromWishlist,
+    moveToCartFromWishlist,
+    wishlistLoading,
+    wishlistError,
+  } = useWishlist()
   const { addToCart } = useCart()
 
   return (
@@ -39,14 +45,14 @@ function Wishlist() {
                   <div className="wishlist-item__actions">
                     <Button
                       size="sm"
-                      onClick={() => moveToCartFromWishlist(book, addToCart)}
+                      onClick={() => void moveToCartFromWishlist(book, addToCart)}
                     >
                       Move to Cart
                     </Button>
                     <Button
                       size="sm"
                       variant="danger"
-                      onClick={() => removeFromWishlist(book.id)}
+                      onClick={() => void removeFromWishlist(book.id)}
                     >
                       Remove
                     </Button>
@@ -62,6 +68,8 @@ function Wishlist() {
               actionLink="/shop"
             />
           )}
+          {wishlistLoading ? <p className="muted">Refreshing wishlist...</p> : null}
+          {wishlistError ? <p className="muted">{wishlistError}</p> : null}
         </div>
       </section>
     </>

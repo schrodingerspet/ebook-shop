@@ -49,7 +49,7 @@ function BookCard({ book }) {
             <Button
               size="sm"
               variant="ghost"
-              onClick={() => toggleWishlist(book)}
+              onClick={() => void toggleWishlist(book)}
               aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
             >
               {wished ? 'Saved' : 'Wishlist'}

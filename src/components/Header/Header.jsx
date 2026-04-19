@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import SearchBar from '../SearchBar/SearchBar'
 import { useCart } from '../../context/CartContext'
 import { useWishlist } from '../../context/WishlistContext'
+import { useAuth } from '../../context/AuthContext'
 import './Header.css'
 
 const navItems = [
@@ -17,6 +18,7 @@ function Header() {
   const navigate = useNavigate()
   const { cartCount } = useCart()
   const { wishlistCount } = useWishlist()
+  const { isLoggedIn, userInfo, logout } = useAuth()
   const [searchTerm, setSearchTerm] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -58,12 +60,27 @@ function Header() {
             <span>🛒</span> Cart
             {cartCount > 0 ? <i>{cartCount}</i> : null}
           </Link>
-          <Link to="/login" className="header__login">
-            Login
-          </Link>
-          <Link to="/register" className="header__register">
-            Register
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <span className="header__login">Hi, {userInfo?.name || 'User'}</span>
+              <button
+                type="button"
+                className="header__register"
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="header__login">
+                Login
+              </Link>
+              <Link to="/register" className="header__register">
+                Register
+              </Link>
+            </>
+          )}
           <button
             className="header__menu-btn"
             aria-label="Toggle menu"

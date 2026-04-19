@@ -1,6 +1,6 @@
-# Ebook Shop (Frontend Only)
+# Ebook Shop
 
-A polished and beginner-friendly React + Vite frontend for a MERN stack academic mini project.
+A React + Vite frontend with an Express + MongoDB backend.
 
 ## Setup
 
@@ -8,7 +8,7 @@ A polished and beginner-friendly React + Vite frontend for a MERN stack academic
    ```bash
    npm install
    ```
-2. Start development server:
+2. Start frontend development server:
    ```bash
    npm run dev
    ```
@@ -17,13 +17,28 @@ A polished and beginner-friendly React + Vite frontend for a MERN stack academic
    npm run build
    ```
 
+## Backend Setup
+
+1. Install backend dependencies:
+   ```bash
+   npm --prefix backend install
+   ```
+2. Create backend env file:
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
+3. Update `backend/.env` values (`MONGO_URI`, `JWT_SECRET`, optional Cloudinary keys).
+4. Start backend:
+   ```bash
+   npm --prefix backend run start
+   ```
+
 ## Main Tech Used
 
 - React + Vite
 - React Router
-- Context API (Cart + Wishlist)
-- LocalStorage persistence
-- Mock data (no backend)
+- Context API (Auth + Cart + Wishlist + Books)
+- MongoDB (Mongoose)
 - Simple CSS files (component/page based)
 
 ## Routing
@@ -44,15 +59,19 @@ Defined in `src/App.jsx` using `Routes` and `Route`:
 
 ## State Management
 
+- `src/context/AuthContext.jsx`
+  - login/register/logout
+  - token persistence in `localStorage`
+- `src/context/BooksContext.jsx`
+  - fetch books from backend (`/api/books`)
+  - normalize backend data for UI
 - `src/context/CartContext.jsx`
   - add/remove books
   - update quantity
-  - subtotal and cart count
+  - subtotal and cart count (stored locally)
 - `src/context/WishlistContext.jsx`
-  - add/remove/toggle wishlist
-  - wishlist count
-
-Both contexts save data to `localStorage`, so refresh does not clear cart/wishlist.
+  - add/remove/toggle wishlist through backend APIs
+  - wishlist count synced with database for logged-in users
 
 ## Folder Structure
 
@@ -65,7 +84,7 @@ src/
     EmptyState/ NewsletterSection/ TrustSection/
     PromoCard/ Footer/ PageBanner/ Button/ FormInput/
   context/      # Cart and Wishlist contexts
-  data/         # books and categories mock data
+  data/         # categories and fallback static data
   pages/        # Route-level pages
   utils/        # small helpers (currency formatting)
   App.jsx       # main layout + routes
@@ -73,6 +92,9 @@ src/
   index.css     # global theme and utility styles
 ```
 
-## Viva / Presentation Short Explanation
+## API Behavior
 
-Ebook Shop is a frontend-only ecommerce UI made with React and Vite. It uses React Router for page navigation and Context API for global cart and wishlist state. We used mock book data and stored cart/wishlist in localStorage to simulate real shopping behavior without backend integration. The design is modern and responsive, while the code stays simple and easy to explain page by page.
+- Login/Register hits `/api/auth/*`
+- Shop/Home/Book Details fetch books from `/api/books`
+- Wishlist actions update MongoDB via `/api/users/wishlist/*`
+- Checkout creates orders via `/api/orders`

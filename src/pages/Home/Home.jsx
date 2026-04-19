@@ -5,11 +5,13 @@ import BookCard from '../../components/BookCard/BookCard'
 import PromoCard from '../../components/PromoCard/PromoCard'
 import TrustSection from '../../components/TrustSection/TrustSection'
 import NewsletterSection from '../../components/NewsletterSection/NewsletterSection'
-import books from '../../data/books'
 import categories from '../../data/categories'
+import EmptyState from '../../components/EmptyState/EmptyState'
+import { useBooks } from '../../context/BooksContext'
 import './Home.css'
 
 function Home() {
+  const { books, booksLoading, booksError } = useBooks()
   const featuredBooks = books.filter((book) => book.featured).slice(0, 8)
   const trendingBooks = books.filter((book) => book.trending).slice(0, 8)
 
@@ -17,6 +19,31 @@ function Home() {
     ...category,
     count: books.filter((book) => book.category === category.name).length,
   }))
+
+  if (booksLoading) {
+    return (
+      <section className="section-space">
+        <div className="page-container">
+          <p>Loading books...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (booksError) {
+    return (
+      <section className="section-space">
+        <div className="page-container">
+          <EmptyState
+            title="Could not load books"
+            description={booksError}
+            actionText="Go to Shop"
+            actionLink="/shop"
+          />
+        </div>
+      </section>
+    )
+  }
 
   return (
     <>

@@ -95,6 +95,23 @@
   font-size: 0.9rem;
 }
 
+.checkout-error {
+  margin: 0.25rem 0 0;
+  color: #b42318;
+  font-size: 0.84rem;
+}
+
+.checkout-login-note {
+  margin: 0.2rem 0 0;
+  font-size: 0.84rem;
+  color: #475467;
+}
+
+.checkout-login-note a {
+  color: var(--primary);
+  font-weight: 700;
+}
+
 @media (max-width: 1020px) {
   .checkout-layout {
     grid-template-columns: 1fr;

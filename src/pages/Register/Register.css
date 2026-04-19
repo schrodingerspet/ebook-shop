@@ -21,6 +21,10 @@
   font-size: 0.84rem;
 }
 
+.register-message--error {
+  color: #b42318;
+}
+
 .register-link {
   margin: 0.65rem 0 0;
   color: #475467;

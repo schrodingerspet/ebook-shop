@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import PageBanner from '../../components/PageBanner/PageBanner'
 import FormInput from '../../components/FormInput/FormInput'
 import Button from '../../components/Button/Button'
+import { useAuth } from '../../context/AuthContext'
 import './Register.css'
 
 function Register() {
+  const navigate = useNavigate()
+  const { register, authLoading } = useAuth()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,13 +17,14 @@ function Register() {
   })
   const [errors, setErrors] = useState({})
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('success')
 
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormData((prevData) => ({ ...prevData, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const formErrors = {}
 
@@ -42,13 +46,25 @@ function Register() {
     setErrors(formErrors)
     if (Object.keys(formErrors).length > 0) return
 
-    setMessage('Registration successful! (Frontend simulation)')
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    })
+    try {
+      await register({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+      })
+      setMessage('Registration successful! Redirecting...')
+      setMessageType('success')
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      })
+      navigate('/')
+    } catch (error) {
+      setMessage(error.message)
+      setMessageType('error')
+    }
   }
 
   return (
@@ -99,10 +115,14 @@ function Register() {
               error={errors.confirmPassword}
             />
 
-            <Button type="submit" fullWidth>
-              Register
+            <Button type="submit" fullWidth disabled={authLoading}>
+              {authLoading ? 'Registering...' : 'Register'}
             </Button>
-            {message ? <p className="register-message">{message}</p> : null}
+            {message ? (
+              <p className={`register-message ${messageType === 'error' ? 'register-message--error' : ''}`}>
+                {message}
+              </p>
+            ) : null}
             <p className="register-link">
               Already have an account? <Link to="/login">Login here</Link>
             </p>

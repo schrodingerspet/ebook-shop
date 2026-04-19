@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PageBanner from '../../components/PageBanner/PageBanner'
 import FormInput from '../../components/FormInput/FormInput'
 import Button from '../../components/Button/Button'
 import OrderSummary from '../../components/OrderSummary/OrderSummary'
 import EmptyState from '../../components/EmptyState/EmptyState'
 import { useCart } from '../../context/CartContext'
+import { useAuth } from '../../context/AuthContext'
+import { apiRequest } from '../../utils/api'
 import { formatCurrency } from '../../utils/format'
 import './Checkout.css'
 
@@ -20,10 +23,13 @@ const initialForm = {
 
 function Checkout() {
   const { cartItems, subtotal, cartCount, clearCart } = useCart()
+  const { isLoggedIn, userInfo } = useAuth()
   const [formData, setFormData] = useState(initialForm)
   const [paymentMethod, setPaymentMethod] = useState('card')
   const [errors, setErrors] = useState({})
   const [orderSuccess, setOrderSuccess] = useState(null)
+  const [orderError, setOrderError] = useState('')
+  const [placingOrder, setPlacingOrder] = useState(false)
 
   const validateForm = () => {
     const formErrors = {}
@@ -47,18 +53,55 @@ function Checkout() {
     setFormData((prevData) => ({ ...prevData, [name]: value }))
   }
 
-  const handlePlaceOrder = (event) => {
+  const handlePlaceOrder = async (event) => {
     event.preventDefault()
 
     const formErrors = validateForm()
     setErrors(formErrors)
+    setOrderError('')
 
     if (Object.keys(formErrors).length > 0) return
 
-    const orderNumber = `EBK${Math.floor(Math.random() * 900000 + 100000)}`
-    setOrderSuccess(orderNumber)
-    setFormData(initialForm)
-    clearCart()
+    if (!isLoggedIn || !userInfo?.token) {
+      setOrderError('Please login before placing an order.')
+      return
+    }
+
+    try {
+      setPlacingOrder(true)
+      const order = await apiRequest('/api/orders', {
+        method: 'POST',
+        token: userInfo.token,
+        body: {
+          items: cartItems.map((item) => ({
+            book: item.id,
+            title: item.title,
+            qty: item.quantity,
+            price: item.price,
+            image: item.image,
+          })),
+          totalPrice: Number(totalPayable.toFixed(2)),
+          paymentMethod,
+          shippingAddress: {
+            address: formData.address,
+            city: formData.city,
+            postalCode: formData.zipCode,
+            country: formData.state,
+          },
+          paymentResult: {
+            status: 'created',
+          },
+        },
+      })
+
+      setOrderSuccess(order._id || `EBK${Math.floor(Math.random() * 900000 + 100000)}`)
+      setFormData(initialForm)
+      clearCart()
+    } catch (error) {
+      setOrderError(error.message)
+    } finally {
+      setPlacingOrder(false)
+    }
   }
 
   const totalPayable = useMemo(() => {
@@ -77,8 +120,7 @@ function Checkout() {
               <div className="checkout-success__icon">✅</div>
               <h2>Order Confirmed</h2>
               <p>
-                Your order ID is <strong>{orderSuccess}</strong>. This is a simulated
-                checkout flow for frontend demonstration.
+                Your order ID is <strong>{orderSuccess}</strong>. The order is saved in your database.
               </p>
               <Button to="/shop">Continue Shopping</Button>
             </div>
@@ -235,9 +277,15 @@ function Checkout() {
                 showCheckoutButton={false}
               />
 
-              <Button type="submit" fullWidth>
-                Place Order
+              <Button type="submit" fullWidth disabled={placingOrder}>
+                {placingOrder ? 'Placing Order...' : 'Place Order'}
               </Button>
+              {orderError ? <p className="checkout-error">{orderError}</p> : null}
+              {!isLoggedIn ? (
+                <p className="checkout-login-note">
+                  Please <Link to="/login" state={{ from: '/checkout' }}>login</Link> to place orders.
+                </p>
+              ) : null}
             </aside>
           </form>
         </div>

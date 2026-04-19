@@ -1,21 +1,27 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import PageBanner from '../../components/PageBanner/PageBanner'
 import FormInput from '../../components/FormInput/FormInput'
 import Button from '../../components/Button/Button'
+import { useAuth } from '../../context/AuthContext'
 import './Login.css'
 
 function Login() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const redirectTo = location.state?.from || '/'
+  const { login, authLoading } = useAuth()
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('success')
 
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormData((prevData) => ({ ...prevData, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const formErrors = {}
 
@@ -32,8 +38,19 @@ function Login() {
     setErrors(formErrors)
     if (Object.keys(formErrors).length > 0) return
 
-    setMessage('Login successful! (Frontend simulation)')
-    setFormData({ email: '', password: '' })
+    try {
+      await login({
+        email: formData.email.trim(),
+        password: formData.password,
+      })
+      setMessage('Login successful! Redirecting...')
+      setMessageType('success')
+      setFormData({ email: '', password: '' })
+      navigate(redirectTo, { replace: true })
+    } catch (error) {
+      setMessage(error.message)
+      setMessageType('error')
+    }
   }
 
   return (
@@ -74,10 +91,14 @@ function Login() {
                 onChange={handleChange}
                 error={errors.password}
               />
-              <Button type="submit" fullWidth>
-                Login
+              <Button type="submit" fullWidth disabled={authLoading}>
+                {authLoading ? 'Logging in...' : 'Login'}
               </Button>
-              {message ? <p className="auth-message">{message}</p> : null}
+              {message ? (
+                <p className={`auth-message ${messageType === 'error' ? 'auth-message--error' : ''}`}>
+                  {message}
+                </p>
+              ) : null}
               <p className="auth-link">
                 New user? <Link to="/register">Create an account</Link>
               </p>
