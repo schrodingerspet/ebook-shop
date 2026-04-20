@@ -22,11 +22,12 @@ export const deleteBook = async (req, res) => {
 };
 
 export const createBook = async (req, res) => {
-    const { title, author, price, description, category, stock, pdfUrl, preview, summary } = req.body;
+    const { title, author, price, image, description, category, stock, pdfUrl, preview, summary } = req.body;
     const book = await Book.create({
         title,
         author,
         price,
+        image,
         description,
         category,
         stock,

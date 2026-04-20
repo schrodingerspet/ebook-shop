@@ -16,7 +16,9 @@ const orderSchema = new mongoose.Schema(
                 title: String,
                 qty: Number,
                 price: Number,
-                image: String
+                image: String,
+                pdfUrl: String,
+                preview: String
             }
         ],
         shippingAddress: {

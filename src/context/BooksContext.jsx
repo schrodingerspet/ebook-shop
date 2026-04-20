@@ -56,6 +56,18 @@ export function BooksProvider({ children }) {
     }
   }, [])
 
+  const deleteBook = useCallback(async (id) => {
+    try {
+      await apiRequest(`/api/books/${id}`, {
+        method: 'DELETE',
+      })
+      setBooks((currentBooks) => currentBooks.filter((book) => book.id !== id))
+    } catch (error) {
+      console.error('Failed to delete book:', error.message)
+      throw error
+    }
+  }, [])
+
   useEffect(() => {
     refreshBooks()
   }, [refreshBooks])
@@ -66,8 +78,9 @@ export function BooksProvider({ children }) {
       booksLoading,
       booksError,
       refreshBooks,
+      deleteBook,
     }),
-    [books, booksLoading, booksError, refreshBooks],
+    [books, booksLoading, booksError, refreshBooks, deleteBook],
   )
 
   return <BooksContext.Provider value={value}>{children}</BooksContext.Provider>

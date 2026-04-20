@@ -14,6 +14,8 @@ import Wishlist from './pages/Wishlist/Wishlist'
 import About from './pages/About/About'
 import Contact from './pages/Contact/Contact'
 import NotFound from './pages/NotFound/NotFound'
+import AddBook from './pages/AddBook/AddBook'
+import Orders from './pages/Orders/Orders'
 
 function App() {
   const location = useLocation()
@@ -30,11 +32,13 @@ function App() {
           <Route path="/book/:id" element={<BookDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/add-book" element={<AddBook />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

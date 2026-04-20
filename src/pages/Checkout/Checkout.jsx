@@ -79,6 +79,8 @@ function Checkout() {
             qty: item.quantity,
             price: item.price,
             image: item.image,
+            pdfUrl: item.pdfUrl,
+            preview: item.preview,
           })),
           totalPrice: Number(totalPayable.toFixed(2)),
           paymentMethod,

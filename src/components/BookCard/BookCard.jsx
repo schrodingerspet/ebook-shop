@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
 import { useWishlist } from '../../context/WishlistContext'
+import { useBooks } from '../../context/BooksContext'
 import { formatCurrency, getDiscountPercent } from '../../utils/format'
 import Button from '../Button/Button'
 import RatingStars from '../RatingStars/RatingStars'
@@ -9,6 +10,7 @@ import './BookCard.css'
 function BookCard({ book }) {
   const { addToCart } = useCart()
   const { isInWishlist, toggleWishlist } = useWishlist()
+  const { deleteBook } = useBooks()
   const wished = isInWishlist(book.id)
   const discount = getDiscountPercent(book.price, book.originalPrice)
 
@@ -53,6 +55,20 @@ function BookCard({ book }) {
               aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
             >
               {wished ? 'Saved' : 'Wishlist'}
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={async () => {
+                if (!window.confirm('Delete this book permanently?')) return
+                try {
+                  await deleteBook(book.id)
+                } catch (error) {
+                  alert('Unable to delete book. Please try again.')
+                }
+              }}
+            >
+              Delete
             </Button>
           </div>
         </div>

@@ -9,6 +9,8 @@ import './Header.css'
 const navItems = [
   { to: '/', label: 'Home' },
   { to: '/shop', label: 'All Books' },
+  { to: '/orders', label: 'My Purchases' },
+  { to: '/add-book', label: 'Add Book' },
   { to: '/wishlist', label: 'Wishlist' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
