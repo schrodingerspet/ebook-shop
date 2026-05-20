@@ -10,7 +10,7 @@ import { BooksProvider } from './context/BooksContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/ebook-shop/">
       <AuthProvider>
         <BooksProvider>
           <WishlistProvider>
