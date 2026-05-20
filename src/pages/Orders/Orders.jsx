@@ -32,6 +32,7 @@ function Orders() {
     if (isLoggedIn && userInfo?.token) {
       fetchOrders()
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOrders([])
     }
   }, [isLoggedIn, userInfo?.token])

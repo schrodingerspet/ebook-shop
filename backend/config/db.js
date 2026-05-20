@@ -10,7 +10,7 @@ const connectDB = async () => {
             await mongoose.connect(uri || 'mongodb://127.0.0.1:27017/ebookshop', { serverSelectionTimeoutMS: 2000 });
             console.log("MongoDB Connected (Local)");
             return;
-        } catch (error) {
+        } catch {
             console.log("Local MongoDB not found, starting In-Memory MongoDB...");
             const mongod = await MongoMemoryServer.create();
             uri = mongod.getUri();

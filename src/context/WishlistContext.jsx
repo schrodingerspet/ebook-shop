@@ -13,6 +13,7 @@ export function WishlistProvider({ children }) {
 
   useEffect(() => {
     if (!isLoggedIn || !userInfo?.token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setWishlistItems([])
       setWishlistError('')
       return

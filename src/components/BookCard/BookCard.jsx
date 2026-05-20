@@ -63,7 +63,7 @@ function BookCard({ book }) {
                 if (!window.confirm('Delete this book permanently?')) return
                 try {
                   await deleteBook(book.id)
-                } catch (error) {
+                } catch {
                   alert('Unable to delete book. Please try again.')
                 }
               }}

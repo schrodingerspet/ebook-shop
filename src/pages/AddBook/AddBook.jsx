@@ -31,7 +31,7 @@ const AddBook = () => {
     setMessage('');
 
     try {
-      const response = await apiRequest('/api/books', {
+      await apiRequest('/api/books', {
         method: 'POST',
         body: formData
       });

@@ -96,7 +96,9 @@ function Checkout() {
         },
       })
 
-      setOrderSuccess(order._id || `EBK${Math.floor(Math.random() * 900000 + 100000)}`)
+      // eslint-disable-next-line react-hooks/purity
+      const fallbackId = `EBK${Math.floor(Math.random() * 900000 + 100000)}`
+      setOrderSuccess(order._id || fallbackId)
       setFormData(initialForm)
       clearCart()
     } catch (error) {
@@ -106,6 +108,7 @@ function Checkout() {
     }
   }
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const totalPayable = useMemo(() => {
     const tax = subtotal * 0.05
     const platformFee = subtotal > 0 ? 1.99 : 0
